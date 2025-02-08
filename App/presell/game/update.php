@@ -40,12 +40,14 @@ function query($conn, $sql) {
 }
 
 function get_connect() {
-$dbname = "u756913841_subwaypaypv";
-$dbuser = "u756913841_tki20";
-$dbpass = "Severino@123";
+    include '../conectarbanco.php';
+
+//$dbname = "u756913841_subwaypaypv";
+//$dbuser = "u756913841_tki20";
+//$dbpass = "Severino@123";
     
-    $host = "localhost";
-    $conn = new mysqli($host, $dbuser, $dbpass, $dbname);
+    //$host = "localhost";
+    //$conn = new mysqli($host, $dbuser, $dbpass, $dbname);
     
     if ($conn->connect_error) {
         http_response_code(500); // internal server error

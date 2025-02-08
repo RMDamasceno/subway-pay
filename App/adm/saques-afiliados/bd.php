@@ -2,7 +2,7 @@
 include './../../conectarbanco.php';
 
 // Verificar a conexão
-$conn = new mysqli($config['db_host'], $config['db_user'], $config['db_pass'], $config['db_name']);
+//$conn = new mysqli($config['db_host'], $config['db_user'], $config['db_pass'], $config['db_name']);
 
 if ($conn->connect_error) {
     die("Erro na conexão com o banco de dados: " . $conn->connect_error);

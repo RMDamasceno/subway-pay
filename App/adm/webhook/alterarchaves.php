@@ -14,11 +14,13 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 function get_conn()
 {
-    $dbname = "u574069177_frutinhamoney";
-    $dbuser = "u574069177_tki3";
-    $dbpass = "Severino@123";
+    include './../../conectarbanco.php'
+    //$dbname = "u574069177_frutinhamoney";
+    //$dbuser = "u574069177_tki3";
+    //$dbpass = "Severino@123";
 
-    return new mysqli('localhost', $dbuser, $dbpass, $dbname);
+    //return new mysqli('localhost', $dbuser, $dbpass, $dbname);
+    return $conn;
 }
 
 function required($form, $field)

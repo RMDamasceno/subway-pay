@@ -9,7 +9,7 @@ if ($email && isset($_POST['msg'])) {
     $valor = $_POST['msg'];
 
     // Conexão com o banco de dados
-    $conn = new mysqli('localhost', $config['db_user'], $config['db_pass'], $config['db_name']);
+    //$conn = new mysqli('localhost', $config['db_user'], $config['db_pass'], $config['db_name']);
     
     // Verificar a conexão
     if ($conn->connect_error) {
@@ -66,7 +66,8 @@ if (!empty($email)) {
         
          include './../conectarbanco.php';
 
-        $conn = new mysqli('localhost', $config['db_user'], $config['db_pass'], $config['db_name']);
+        //$conn = new mysqli('localhost', $config['db_user'], $config['db_pass'], $config['db_name']);
+        $conn = null
         $dbuser = $config['db_user'];
         $conn = new PDO("mysql:host=localhost;dbname={$config['db_name']}", $config['db_user'], $config['db_pass']);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -128,7 +129,7 @@ if (!empty($email)) {
 
     include './../conectarbanco.php';
 
-    $conn = new mysqli('localhost', $config['db_user'], $config['db_pass'], $config['db_name']);
+    //$conn = new mysqli('localhost', $config['db_user'], $config['db_pass'], $config['db_name']);
 
 
 // Verifique se a conexão foi bem-sucedida

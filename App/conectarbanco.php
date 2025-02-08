@@ -7,4 +7,6 @@ $config = array(
     'db_name' => getenv('DB_NAME') ?: 'subwaypay'
 );
 
+$conn = new mysqli($config['db_host'], $config['db_user'], $config['db_pass'], $config['db_name']);
+
 ?>
