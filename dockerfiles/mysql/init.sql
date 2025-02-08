@@ -1,0 +1,3 @@
+CREATE USER IF NOT EXISTS 'subwaypay'@'%' IDENTIFIED BY 'subwaypay';
+GRANT ALL PRIVILEGES ON subwaypay${DB_DATABASE}.* TO 'subwaypay'@'%';
+FLUSH PRIVILEGES;

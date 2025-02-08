@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: ./dockerfiles/app/
+      dockerfile: Dockerfile
+    image: subwaypay
+    container_name: subwaypay-app
+    restart: unless-stopped
+    working_dir: /var/www/html
+    env_file: 
+      - .env
+    volumes:
+      - ./App/:/var/www/html
+    ports:
+      - 80:80
+    networks:
+      - subwaypay
+
+  db:
+    build:
+      context: ./dockerfiles/mysql/
+      dockerfile: Dockerfile
+    container_name: subwaypay-db
+    restart: unless-stopped
+    env_file: 
+      - .env
+    environment:
+      MYSQL_DATABASE: "${DB_NAME}"
+      MYSQL_ROOT_PASSWORD: "${DB_PASS}"
+      MYSQL_PASSWORD: "${DB_PASS}"
+      MYSQL_USER: "${DB_USER}"
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    networks:
+      - subwaypay
+
+networks:
+  subwaypay:
+    driver: bridge
