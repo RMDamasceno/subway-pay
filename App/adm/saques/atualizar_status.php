@@ -1,6 +1,7 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {session_start();}
+
 include './../../conectarbanco.php';
-session_start();
 
 // Verifica se o valor da sessão está definido
 if (!isset($_SESSION['email'])) {
@@ -36,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt = $conn->prepare($atualizarStatusQuery);
 
     // Vincule os parâmetros
-    $stmt->bind_param("si", $novoStatus, $id);
+    $stmt->bind_param("ss", $novoStatus, $id);
 
     // Execute a consulta
     if ($stmt->execute()) {
