@@ -1,5 +1,5 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {session_start();}
 
 include './../conectarbanco.php';
 
@@ -49,11 +49,8 @@ if (isset($_GET['msg'])) {
         $conn->close();
     }
 }
-?>
 
-
-<?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {session_start();}
 if (!isset($_SESSION['email'])) {
     header("Location: ../");
     exit();}
@@ -121,16 +118,7 @@ if (!empty($email)) {
 } else {
     // O código que você quer executar se o email estiver vazio
 }
-?>
 
-
-
-
-
-
-
-
-<?php
 // Inicie a sessão se ainda não foi iniciada
 
     include './../conectarbanco.php';

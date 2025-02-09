@@ -1,19 +1,16 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {session_start();}
 error_reporting(0);
 if (!isset($_SESSION['email'])) {
     header("Location: ../");
     exit();}
 
-?> 
 
-<?php
-session_start();
 
 $email = isset($_SESSION['email']) ? $_SESSION['email'] : '';
 
 if (!empty($email)) {
-    try {
+    /*try {
         
         
          include './../conectarbanco.php';
@@ -53,10 +50,56 @@ if (!empty($email)) {
 
     } catch (PDOException $e) {
         echo "Erro: " . $e->getMessage();
+    }*/
+    include './../conectarbanco.php';
+
+    if ($conn->connect_error) {
+      die("Erro na conexão: " . $conn->connect_error);
     }
-} else {
+
+    // Prepara a consulta para verificar depósitos pendentes
+    $stmt = $conn->prepare("SELECT * FROM confirmar_deposito WHERE email = ? AND status = 'pendente'");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    while ($row = $result->fetch_assoc()) {
+      // Verifica se há uma correspondência na tabela pix_deposito
+      $stmtPix = $conn->prepare("SELECT * FROM pix_deposito WHERE code = ?");
+      $stmtPix->bind_param("s", $row['externalreference']);
+      $stmtPix->execute();
+      $resultPix = $stmtPix->get_result()->fetch_assoc();
+
+      if ($resultPix !== null) {
+        // Atualiza o status para 'aprovado' na tabela confirmar_deposito
+        $updateStmt = $conn->prepare("UPDATE confirmar_deposito SET status = 'aprovado' WHERE externalreference = ?");
+        $updateStmt->bind_param("s", $row['externalreference']);
+        $updateStmt->execute();
+
+        // Obtém o valor da correspondência na tabela pix_deposito
+        $valorCorrespondencia = $resultPix['value'];
+
+        // Atualiza a coluna saldo na tabela appconfig
+        $updateSaldoStmt = $conn->prepare("UPDATE appconfig SET saldo = saldo + ?, depositou = depositou + ? WHERE email = ?");
+        $updateSaldoStmt->bind_param("dds", $valorCorrespondencia, $valorCorrespondencia, $email);
+        $updateSaldoStmt->execute();
+
+        break; // Sai do loop assim que encontrar uma correspondência
+      }
+
+      // Fecha as conexões preparadas dentro do loop
+      $stmtPix->close();
+    }
+
+    // Fecha os statements e a conexão
+    $stmt->close();
+    if (isset($updateStmt)) $updateStmt->close();
+    if (isset($updateSaldoStmt)) $updateSaldoStmt->close();
+    $conn->close();
+
+  } else {
 }
-?> <?php
+
 
     include './../conectarbanco.php';
 
@@ -83,10 +126,8 @@ if (isset($_SESSION['email'])) {
 }
 
 $conn->close();
-?>
 
-<?php
-include 'conectarbanco.php';
+include './../conectarbanco.php';
 
 //$conn = new mysqli('localhost', $config['db_user'], $config['db_pass'], $config['db_name']);
 

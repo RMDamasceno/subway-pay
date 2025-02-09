@@ -1,7 +1,5 @@
-
-
-
 <?php
+if (session_status() === PHP_SESSION_NONE) {session_start();}
 include '../conectarbanco.php';
 
 //$conn = new mysqli('localhost', $config['db_user'], $config['db_pass'], $config['db_name']);
@@ -27,9 +25,7 @@ if ($result->num_rows > 0) {
 }
 
 $conn->close();
-?>
 
-<?php
 $baseUrl = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
 $baseUrl .= "://".$_SERVER['HTTP_HOST'];
 
@@ -53,7 +49,7 @@ ini_set('display_errors',1);
 ini_set('display_startup_erros',1);
 error_reporting(E_ALL);
 
-session_start();
+
 
 // Função para validar os dados do formulário
 function validateForm($input) {
@@ -79,6 +75,9 @@ function getParamFromUrl($url, $paramName){
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Validar e obter os dados do formulário
+    $cpf = isset($_POST["cpf"]) ? validateForm($_POST["cpf"]) : "";
+    $jogoteste = isset($_POST["jogoteste"]) ? validateForm($_POST["jogoteste"]) : 0;
+    $nome = validateForm($_POST["nome"]);
     $email = validateForm($_POST["email"]);
     $senha = validateForm($_POST["senha"]);
     $telefone = validateForm($_POST["telefone_confirmation"]);
@@ -131,10 +130,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         
         // Inserir dados no banco de dados
-        $insertQuery = "INSERT INTO appconfig (id,cpa, email, senha, telefone, saldo, lead_aff, linkafiliado, indicados, plano, saldo_comissao, data_cadastro, afiliado) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?)";
+        $insertQuery = "INSERT INTO appconfig (id, nome, jogoteste, depositou, cpf, cpa, email, senha, telefone, saldo, lead_aff, linkafiliado, indicados, plano, saldo_comissao, data_cadastro, afiliado,leads_ativos,rollover1,demo,bloc,sacou,percas,ganhos,cpafake,jogo_demo,comissaofake,saldo_cpa,primeiro_deposito,status_primeiro_deposito,cont_cpa) 
+                        VALUES (?, ?, ?, 0, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?,0,0,0,0,0,0,0,0,0,0,0,0,0,0)";
         $stmt = $conn->prepare($insertQuery);
-        $stmt->bind_param("iisssissiiss", $nextId, $cpa, $email, $senha, $telefone, $saldo, $leadAff, $linkAfiliado, $plano, $saldo_comissao, $dataCadastroFormatada, $afiliado);
+        $stmt->bind_param("isisisssissiiss", $nextId, $nome, $jogoteste, $cpf, $cpa, $email, $senha, $telefone, $saldo, $leadAff, $linkAfiliado, $plano, $saldo_comissao, $dataCadastroFormatada, $afiliado);
 
         if ($stmt->execute()) {
             // Definir o email como uma variável de sessão
@@ -372,6 +371,11 @@ if (!empty($errorMessage)) {
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/libphonenumber-js/1.7.24/libphonenumber-js.min.js"></script>
 
+  <div class="properties">
+  <h4 class="rarity-heading">Nome</h4>
+  <div class="rarity-row roboto-type2">
+  <input type="text" class="large-input-field w-input" maxlength="256" name="nome" placeholder="Seu Nome Completo" id="nome" required>
+  </div>
   <div class="properties">
   <h4 class="rarity-heading">E-mail</h4>
   <div class="rarity-row roboto-type2">

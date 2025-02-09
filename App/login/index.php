@@ -24,13 +24,9 @@ if ($result->num_rows > 0) {
 }
 
 $conn->close();
-?>
 
 
-
-<?php
-session_start();
-
+if (session_status() === PHP_SESSION_NONE) {session_start();}
 // Inicializa as variáveis
 $email = $senha = "";
 $emailErr = $senhaErr = "";

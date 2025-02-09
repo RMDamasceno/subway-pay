@@ -1,8 +1,7 @@
 <?php
-session_start();
 $vida_sessao = 15 * 60; // 15 minutos em segundos
 session_set_cookie_params($vida_sessao);
-
+if (session_status() === PHP_SESSION_NONE) {session_start();}
 include './../../conectarbanco.php';
 
 try {

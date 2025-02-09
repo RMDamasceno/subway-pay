@@ -1,15 +1,5 @@
 <?php
-session_start();
-
-
-?>
-
-
-
-
-<?php
-// Iniciar ou resumir a sessão
-session_start();
+if (session_status() === PHP_SESSION_NONE) {session_start();}
 
 // Obtém o email da sessão
 $email = 'influencer@mail.com';

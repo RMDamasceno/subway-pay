@@ -1,4 +1,6 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {session_start();}
+
 include './../conectarbanco.php';
 
 //$conn = new mysqli('localhost', $config['db_user'], $config['db_pass'], $config['db_name']);
@@ -24,10 +26,7 @@ if ($result->num_rows > 0) {
 }
 
 $conn->close();
-?>
 
-
-<?php
 // Conectar ao banco de dados
 include './../conectarbanco.php';
 
@@ -55,11 +54,7 @@ if ($result) {
 }
 
 $conn->close();
-?>
 
-
-
-<?php
 // Obter a URL
 $baseUrl = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
 $baseUrl .= "://".$_SERVER['HTTP_HOST'];
@@ -71,17 +66,11 @@ $callbackUrl = $baseUrl . $staticPart;
 
 
 
-echo '<script>';
-echo 'console.log("Callback URL:", ' . json_encode($callbackUrl) . ');'; // Adicione esta linha para depurar
-echo 'var callbackUrl = ' . json_encode($callbackUrl) . ';';
-echo '</script>';
-?>
+//echo '<script>';
+//echo 'console.log("Callback URL:", ' . json_encode($callbackUrl) . ');'; // Adicione esta linha para depurar
+//echo 'var callbackUrl = ' . json_encode($callbackUrl) . ';';
+//echo '</script>';
 
-
-
-
-
-<?php
 // Conectar ao banco de dados
 include './../conectarbanco.php';
 
@@ -94,12 +83,10 @@ if ($conn->connect_error) {
 
 
 
-// Iniciar a sessão
-session_start();
 
 // Obter o email e jogoteste da sessão
 $email = $_SESSION['email'];  // ajuste conforme a sua lógica de sessão
-$jogoteste = $_SESSION['jogoteste'];  // ajuste conforme a sua lógica de sessão
+$jogoteste = isset($_SESSION['jogoteste']) ? validateForm($_SESSION['jogoteste']) : "";  // ajuste conforme a sua lógica de sessão
 
 $sql = "SELECT * FROM appconfig WHERE email = '$email' AND (jogoteste IS NULL OR jogoteste != 1)";
 $result = $conn->query($sql);
@@ -116,13 +103,8 @@ if ($result->num_rows > 0) {
 
 
 $conn->close();
-?>
 
-
-
-
-<?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {session_start();}
 
 if (!isset($_SESSION['email'])) {
     header("Location: ../login");
@@ -283,7 +265,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sendRequest
     );
 
-    if ($res['response'] === 'OK') {
+    if (isset($res['response']) && $res['response'] === 'OK') {
         $conn = get_conn();
 
         if ($conn->connect_error) {

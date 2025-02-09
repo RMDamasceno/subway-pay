@@ -15,7 +15,10 @@ $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    echo "R$ " . number_format($row["total"], 2, ',', ''); 
+    isset($row["total"]) ? $row["total"] : 0 ;
+    $total = $row["total"] ?? 0;
+
+    echo "R$ " . number_format($total, 2, ',', ''); 
 } else {
     echo "R$ 0"; 
 }

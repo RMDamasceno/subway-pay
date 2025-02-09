@@ -52,19 +52,19 @@ function obterMultiplicador() {
 
   switch (jogarSubway) {
     case '1BC':
-      return 1;
+      return 0.1;
     case '2BC':
-      return 2;
+      return 0.5;
     case '3BC':
-      return 3;
-    default:
       return 1;
+    default:
+      return 0.1;
   }
 }
 
 
 var jogando = true;
-var xmeta = 7;
+var xmeta = 10;
 var multiplies = obterMultiplicador();
 var meta = aposta * xmeta;
 var acumulado;

@@ -1,6 +1,6 @@
 <?php
 
-session_start();
+if (session_status() === PHP_SESSION_NONE) {session_start();}
 
 if (!isset($_SESSION['emailadm'])) {
     header("Location: ../login");
@@ -48,11 +48,11 @@ function get_form()
         'saldo' => $_POST['saldo'],
         'linkafiliado' => $_POST['linkafiliado'],
         'plano' => $_POST['plano'],
-        'depositou' => $_POST['depositou'],
-        'bloqueado' => $_POST['bloqueado'],
-        'saldo_comissao' => $_POST['saldo_comissao'],
-        'percas' => $_POST['percas'],
-        'ganhos' => $_POST['ganhos'],
+        'depositou' => isset($_POST['depositou']) ? $_POST['depositou'] : 0,
+        'bloqueado' => isset($_POST['bloqueado']) ? $_POST['bloqueado'] : 0, //$_POST['bloqueado'],
+        'saldo_comissao' => isset($_POST['saldo_comissao']) ? $_POST['saldo_comissao'] : 0, //$_POST['saldo_comissao'],
+        'percas' => isset($_POST['percas']) ? $_POST['percas'] : 0, //$_POST['percas'],
+        'ganhos' => isset($_POST['ganhos']) ? $_POST['ganhos'] : 0, //$_POST['ganhos'],
         'cpa' => $_POST['cpa'],
     );
 }

@@ -1,5 +1,5 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {session_start();}
 
 include './../conectarbanco.php';
 
@@ -43,24 +43,23 @@ if ($email && isset($_POST['msg'])) {
     // Fechar a conexão com o banco de dados
     $conn->close();
 }
-?>
 
+if (session_status() === PHP_SESSION_NONE) {session_start();}
 
-<?php
-session_start();
 if (!isset($_SESSION['email'])) {
     header("Location: ../");
     exit();}
 
-?>
-<?php
+
 // Iniciar ou resumir a sessão
-session_start();
+if (session_status() === PHP_SESSION_NONE) {session_start();}
+
 
 // Obtém o email da sessão
 $email = isset($_SESSION['email']) ? $_SESSION['email'] : '';
 
 if (!empty($email)) {
+/*
     try {
         
         
@@ -112,19 +111,61 @@ if (!empty($email)) {
         // Trata a exceção, se necessário
         echo "Erro: " . $e->getMessage();
     }
+*/
+include './../conectarbanco.php';
+
+if ($conn->connect_error) {
+    die("Erro na conexão: " . $conn->connect_error);
+}
+
+// Verifica se o email existe na tabela confirmar_deposito
+$stmt = $conn->prepare("SELECT * FROM confirmar_deposito WHERE email = ? AND status = 'pendente'");
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$result = $stmt->get_result();
+
+$stmtPix = null;
+$updateStmt = null;
+$updateSaldoStmt = null;
+
+// Loop através de todas as entradas com o mesmo email e status pendente
+while ($row = $result->fetch_assoc()) {
+    // Verifica se há uma correspondência na tabela pix_deposito
+    $stmtPix = $conn->prepare("SELECT * FROM pix_deposito WHERE code = ?");
+    $stmtPix->bind_param("s", $row['externalreference']);
+    $stmtPix->execute();
+    $resultPix = $stmtPix->get_result()->fetch_assoc();
+
+    if ($resultPix !== null) {
+        // Atualiza o status para 'aprovado' na tabela confirmar_deposito
+        $updateStmt = $conn->prepare("UPDATE confirmar_deposito SET status = 'aprovado' WHERE externalreference = ?");
+        $updateStmt->bind_param("s", $row['externalreference']);
+        $updateStmt->execute();
+
+        // Obtém o valor da correspondência na tabela pix_deposito
+        $valorCorrespondencia = $resultPix['value'];
+
+        // Atualiza a coluna saldo na tabela appconfig
+        $updateSaldoStmt = $conn->prepare("UPDATE appconfig SET saldo = saldo + ?, depositou = depositou + ? WHERE email = ?");
+        $updateSaldoStmt->bind_param("dds", $valorCorrespondencia, $valorCorrespondencia, $email);
+        $updateSaldoStmt->execute();
+        
+        header("Location: ../obrigado");
+        break; // Sai do loop assim que encontrar uma correspondência
+    }
+}
+
+// Fecha as conexões preparadas, se foram inicializadas
+if ($stmt) $stmt->close();
+if ($stmtPix) $stmtPix->close();
+if ($updateStmt) $updateStmt->close();
+if ($updateSaldoStmt) $updateSaldoStmt->close();
+
+$conn->close();
 } else {
     // O código que você quer executar se o email estiver vazio
 }
-?>
 
-
-
-
-
-
-
-
-<?php
 // Inicie a sessão se ainda não foi iniciada
 
     include './../conectarbanco.php';

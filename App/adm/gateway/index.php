@@ -1,8 +1,6 @@
 <?php
-include './bd.php'; ?>
-
-<?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {session_start();}
+include './bd.php'; 
 
 if (!isset($_SESSION['emailadm'])) {
     header("Location: ../login");
@@ -192,21 +190,21 @@ $result = $result2->fetch_assoc();
           <form id="gateway-form">
             <div class="card-id" id="card-gateway">
               <p id="card-title"><strong>Client ID</strong></p>
-              <!--<input id="input-id" class="input-id" type="text" placeholder="Digite seu Client ID...">-->
+              <input id="input-id" class="input-id" type="text" placeholder="Digite seu Client ID..." value="<?php echo $client_id; ?>">
               <!--<h5 id="atual-title">Client ID atual:</h5>-->
-              <input id="atual-id" class="input-id" type="text" disabled placeholder="<?php echo $client_id; ?>">
+              <!--<input id="atual-id" class="input-id" type="text" disabled placeholder="<?php //echo $client_id; ?>">-->
             </div>
 
-            <!--<div class="card-secret" id="card-gateway">-->
-            <!--  <p id="card-title"><strong>Client Secret</strong></p>-->
-            <!--  <input id="input-secret" class="input-secret" type="text" placeholder="Digite seu Client Secret...">-->
+            <div class="card-secret" id="card-gateway">
+              <p id="card-title"><strong>Client Secret</strong></p>
+              <input id="input-secret" class="input-secret" type="password" placeholder="Digite seu Client Secret..." value="*******************************">
             <!--  <h5 id="atual-title">Client Secret atual:</h5>-->
-            <!--  <input id="atual-secret" class="input-secret" type="text" disabled placeholder="<?php echo $client_secret; ?>">-->
-            <!--</div>-->
+            <!--  <input id="atual-secret" class="input-secret" type="text" disabled placeholder="<?php //echo $client_secret; ?>">-->
+            </div>
 
-            <!--<div class="button-container">-->
-            <!--  <button type="submit" id="gateway-btn"><strong>Salvar Alterações</strong></button>-->
-            <!--</div>-->
+            <div class="button-container">
+              <button type="submit" id="gateway-btn"><strong>Salvar Alterações</strong></button>
+            </div>
           </form>
           
           

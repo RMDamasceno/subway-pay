@@ -1,4 +1,8 @@
 <?php
+
+if (session_status() === PHP_SESSION_NONE) {session_start();}
+
+
 include '../conectarbanco.php';
 
 //$conn = new mysqli('localhost', $config['db_user'], $config['db_pass'], $config['db_name']);
@@ -24,21 +28,6 @@ if ($result->num_rows > 0) {
 }
 
 $conn->close();
-?>
-
-
-<?php
-session_start();
-
-
-?>
-
-
-
-
-<?php
-// Iniciar ou resumir a sessão
-session_start();
 
 // Obtém o email da sessão
 $email = 'influencer@mail.com';
@@ -160,7 +149,7 @@ $saldo = 10
 
 
                 <?php
-                session_start();
+                    if (session_status() === PHP_SESSION_NONE) {session_start();}
 
                 // Pegar o email da sessão
                 $email = 'influencer@mail.com';
