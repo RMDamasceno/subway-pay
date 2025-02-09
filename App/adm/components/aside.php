@@ -92,16 +92,7 @@
                             >
                         </li>
         
-            <li class="sidebar-item">
-                            <a
-                              class="sidebar-link waves-effect waves-dark sidebar-link"
-                              href="https://wa.me/5531992812273?text=Preciso+de+suporte+com+o+painel+adm"
-                              target="_blank"
-                              aria-expanded="false"
-                              ><i class="mdi mdi-message"></i
-                              ><span class="hide-menu">Suporte</span></a
-                            >
-                        </li>
+
         
         
         

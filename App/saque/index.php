@@ -285,11 +285,7 @@ $conn->close();
         </a>
         <a href="../deposito/" class="button w-button">Depositar</a>
       </div>
-      <!--<link rel="stylesheet" href="https://cdn.positus.global/production/resources/robbu/whatsapp-button/whatsapp-button.css">-->
-      <!--<a id="robbu-whatsapp-button" target="_blank" href="https://api.whatsapp.com/send?phone=5531992812273&text=Ol%C3%A1,%20vim%20pelo%20site%20e%20gostaria%20de%20tirar%20uma%20d%C3%BAvida%20sobre%20abrir%20uma%20plataforma%20de%20apostas%20ou%20problemas%20em%20algum%20de%20seus%20sites.">-->
-      <!--  <div class="rwb-tooltip">Entre em contato!</div>-->
-      <!--  <img src="https://cdn.positus.global/production/resources/robbu/whatsapp-button/whatsapp-icon.svg">-->
-      <!--</a>-->
+
       <section id="hero" class="hero-section dark wf-section">
         <div class="minting-container w-container">
           <img src="arquivos/with.gif" loading="lazy" width="240" data-w-id="6449f730-ebd9-23f2-b6ad-c6fbce8937f7" alt="Roboto #6340" class="mint-card-image">
